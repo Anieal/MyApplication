@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<com.demo.view.CustomView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+
+    <Button
+        android:id="@+id/btn_clock_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ClockView" />
+
+    <Button
+        android:id="@+id/btn_bezier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Bezier" />
+
+    <com.demo.view.ColorTrackView
+        android:id="@+id/id_changeTextColorView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#44ff0000"
+        android:padding="10dp"
+        app:progress="0"
+        app:text="测试字体"
+        app:text_change_color="#ffff0000"
+        app:text_origin_color="#ff000000"
+        app:text_size="60sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/id_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="StartLeft" />
+
+        <Button
+            android:id="@+id/id_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="StartRight" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/triangles_tiled"
+    android:orientation="vertical">
+
+    <com.demo.view.MagicTextView
+        android:id="@+id/magic_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/btn_star"
+        android:padding="10dp"
+        android:text="Magic"
+        android:textColor="#ff333333"
+        android:textSize="78dp"
+        android:textStyle="bold" />
+
+    <!--xmlns:qwerjk="http://schemas.android.com/apk/res/com.demo"
+        qwerjk:foreground="@drawable/fake_luxury_tiled"
+        qwerjk:innerShadowColor="#FF000000"
+        qwerjk:innerShadowDy="2dp"
+        qwerjk:innerShadowRadius="1dp"
+        qwerjk:outerShadowColor="#FF0088ff"
+        qwerjk:outerShadowDy="3dp"
+        qwerjk:outerShadowRadius="10dp"
+        qwerjk:strokeColor="#FFff0000"
+        qwerjk:strokeJoinStyle="miter"
+        qwerjk:strokeWidth="5dp"-->
+
+</LinearLayout>
