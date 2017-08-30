@@ -3,41 +3,38 @@
     package="com.demo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 外部存储读权限，调试工具加载本地补丁需要 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".ActivityListActivity">
+        <activity
+            android:name=".ActivityListActivity"
+            android:theme="@style/NoTitleAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".MainActivity" />
-
         <activity android:name=".ClockActivity" />
-
         <activity android:name=".BezierActivity" />
-
         <activity android:name=".CustomActivity" />
-
         <activity android:name=".AidlDemoActivity" />
-
         <activity android:name=".LightSensorActivity" />
-
         <activity android:name=".CircleViewActivity" />
-
         <activity android:name=".MagicTextViewActivity" />
-
         <activity android:name=".MouseWebViewActivity" />
-
         <activity android:name=".CustomTextViewActivity" />
 
         <service
@@ -45,9 +42,23 @@
             android:enabled="true"
             android:exported="true"
             android:process=":aidl" />
-
         <service android:name=".service.MessengerService" />
 
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="24577722-1" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="19bd8ad8d441f4f9d75d644a905cae6b" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0Uvu9GgYzPIM/ygcxcvL3VZZtm1CbEyJFVHclTjQmyegAeSZZQGOSVSloQMBF/U4qGEDol1BGa4BDQGCrh2k1Vht+fyP50YlaJAFlN3AHpGnv5PVGBii2bF0TOOz5Azh3139lQ4I44IHupJh73sAePC/yVFLZygaEqfQzjqP5XJCisCc11rA6XhhuRNrP+hmuJL1N9gCEqG8MdeNa2SwY1WGjWIlpirSNw30SbKpHYI9OfhrAt/3v3bM6g5wmhug28HC9tH3anEdcbPEyQ7XRCVCVqlGf+1nDyxs92B+Hwu8KQSxozUs1+yewcadkrJe/Ovo+IblkxxxFTd6bZiJ1AgMBAAECggEBAI8wqhgSd0PuVGat/aJFnivLOeWVhJ9vxTH6jZYBEKaQg/sEOPB8kdTcbUIM0OGC8LO6iKhpp2QT70j38QukPmYNF04OlbnFquT6XGVMbViUNU86p43QTDn3uL0P4hUmeoungtEdl2Wk2WhwKWmLi1E3B/fM//FTXHOyJWlfZlQW2AP7i4WEfucvmgvXp65dQWM1Xw1uOnFWFXVFZHz9he5q9rEG2i8mdu3Yr6JzdbM+ANuVyzqo2ZVBg34+2dNaciBenKobZY+eTHamEJMIDQla4LPrcZ0XzvJg7XmWhgbHhu5nn/FSoVjqabhDGU6JnR0u0AyCOTwtl1zJNZwerOECgYEA5aOT+yQu5TiL7bWchEIlz0OOIbEacpLQFIm1e5PT10T4BTbE3HnwOUsstI+GZ6kQ/f2Nz9QoyKYCn2aNRTYubFVDgqZbZxr5AvOxJSUGt3IBy9TtBiDXY9UZPLg/oeCQYIr9aUHzCFV5L81/pZbeTgg77dXO/0p4HKMQO7I6Ly0CgYEAyQYvnsPChZgH9433HxSDJlTuJgy+ULy9YzTF74zivCpdSMRd+z/kM0BZBTVpakdIJOJhocUwz/3pp35gWRUmVdKW8OlKDC6cU2m1vEuIKyJIWTCAvetippb4qsOyFRgUnWmXx899XmRtUHudEcI4s6aYldksUvR9mvXjkFvhjWkCgYBdtqC4V67PmoD4NCo4iyoU6FPDihvp7+H8z6oBUXWdHyc8MXqrIxQWvYfz87J88TDfBi9uRf2SzLS7SkWSnibZzP3s/mjErew6+Sosp2yTRnJXNYC5BIQB2MAg2GwXaqZgz7fU0bYVi5QWHv3dnLECFTgnuh5sbn6P6TfBtN0rzQKBgFtz5AAvgPR0CNPXkyBhnZS3uKw4yfBDHUnfvVjQ2GnQQCYVp8fg9jlWwej7tpxyF2EoWFBXPHCzTDQ16zE7zPfoWWD6UQSfw+Cyy8oA9s7gxtdEmJ1OU9AECNbvNrof/Wjrm/B79cYWnCCsS/XDTTZ1yR8K8P5AWlBAIyoOkttZAoGBAM4D8pVwZ231v+3vz9OxVSnmhh1OM9MtloqcBja9uxQsUkGchf2BGpd1IEw8KHXRIXtKof3Op+Ry6FeisBh9XQb7XUqa6h45bQMSenXRHMoEoFUnnc/vfZFJkajgm8910u/dIpUNBdSpuzRdoLCWC1Lac4On30dBpQ25HQwC29lt" />
+
+        <provider
+            android:name=".provider.DatabaseProvider"
+            android:authorities="com.demo.database.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>

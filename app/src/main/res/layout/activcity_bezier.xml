@@ -7,6 +7,21 @@
     <com.demo.view.BezierView
         android:id="@+id/bezier_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:visibility="gone"
+        android:layout_height="200dp" />
+
+    <com.demo.view.MyTextView
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"/>
+
+    <com.demo.view.MyTextView
+        android:id="@+id/myTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:visibility="invisible"
+        android:layout_height="30dp"/>
 
 </LinearLayout>

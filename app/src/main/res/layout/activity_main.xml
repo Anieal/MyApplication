@@ -54,6 +54,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="StartRight" />
+
+        <Button
+            android:id="@+id/btn_all_enter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="allEnter" />
     </LinearLayout>
 
 </RelativeLayout>
