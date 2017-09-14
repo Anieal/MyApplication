@@ -24,4 +24,43 @@
         android:visibility="invisible"
         android:layout_height="30dp"/>
 
+    <Button
+        android:id="@+id/btn_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="startService"/>
+
+    <Button
+        android:id="@+id/btn_stop_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stopService"/>
+
+    <Button
+        android:id="@+id/btn_bind_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="bindService"/>
+
+    <Button
+        android:id="@+id/btn_un_bind_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="unBindService"/>
+    <Button
+        android:id="@+id/btn_start_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start download"/>
+    <Button
+        android:id="@+id/btn_pause_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="pause download"/>
+    <Button
+        android:id="@+id/btn_cancel_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cancel download"/>
+
 </LinearLayout>

@@ -42,5 +42,4 @@ public class Person implements Parcelable {
                 "mName='" + mName + '\'' +
                 '}';
     }
-
 }

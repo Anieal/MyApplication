@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AidlDemoActivity extends AppCompatActivity {
-    private final String TAG = this.getClass().getSimpleName();
+    private static final String TAG = "AidlDemoActivity";
     @BindView(R.id.textView2)
     TextView textView2;
     @BindView(R.id.editText)
@@ -40,10 +40,22 @@ public class AidlDemoActivity extends AppCompatActivity {
 
     private boolean hasConnection, hasMessengerConnection;
 
+    private IOnNewPersonArrivedListener mOnNewPersonArrivedListener = new IOnNewPersonArrivedListener.Stub() {
+        @Override
+        public void onNewPersonArrived(Person person) throws RemoteException {
+            mHandler.obtainMessage(ConfigUtils.MSG_NEW_PERSON_ARRIVED, person).sendToTarget();
+        }
+    };
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mAidl = IMyAidl.Stub.asInterface(service);
+            try {
+                service.linkToDeath(mDeathRecipient, 0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -55,17 +67,16 @@ public class AidlDemoActivity extends AppCompatActivity {
     /**
      * 客户端的Messenger
      */
-    private Messenger mClientMessenger = new Messenger(new Handler() {
+    private Messenger mGetReplayMessenger = new Messenger(new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg != null && msg.arg1 == ConfigUtils.MSG_ID_SERVER) {
-                if (msg.getData() == null) {
-                    return;
-                }
-                String content = (String) msg.getData().get(ConfigUtils.MSG_CONTENT);
-                Log.d(TAG, "Message from server: " + content);
+            switch (msg.what) {
+                case ConfigUtils.MSG_ID_SERVER:
+                    Log.i(MessengerService.TAG, "receive msg from service:" + msg.getData().getString(ConfigUtils.MSG_CONTENT));
+                    break;
+                default:
+                    super.handleMessage(msg);
             }
-            super.handleMessage(msg);
         }
     });
 
@@ -101,26 +112,27 @@ public class AidlDemoActivity extends AppCompatActivity {
                 break;
             case R.id.button2:
                 Random random = new Random();
-                Person person = new Person("Shi xin" + random.nextInt(10));
+                Person person = new Person("人物" + random.nextInt(10));
                 try {
                     mAidl.addPerson(person);
                     List<Person> personList = mAidl.getPersonList();
+                    Log.i(TAG, "query person list, list type:" + personList.getClass().getCanonicalName());
+                    Log.i(TAG, "query person list:" + personList.toString());
                     textView2.setText(personList.toString());
+                    mAidl.registerListener(mOnNewPersonArrivedListener);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.button3:
                 String msgContent = editText.getText().toString();
-
-                Message message = Message.obtain();
-                message.arg1 = ConfigUtils.MSG_ID_CLIENT;
+                Message msg = Message.obtain(null, ConfigUtils.MSG_ID_CLIENT);
                 Bundle bundle = new Bundle();
                 bundle.putString(ConfigUtils.MSG_CONTENT, msgContent);
-                message.setData(bundle);
-                message.replyTo = mClientMessenger;//指定回信人是客户端定义的
+                msg.setData(bundle);
+                msg.replyTo = mGetReplayMessenger;
                 try {
-                    mServiceMessenger.send(message);
+                    mServiceMessenger.send(msg);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -136,11 +148,47 @@ public class AidlDemoActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        if (mAidl != null && mAidl.asBinder().isBinderAlive()) {
+            try {
+                Log.d(TAG, "unregister listener: " + mOnNewPersonArrivedListener);
+                mAidl.unregisterListener(mOnNewPersonArrivedListener);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
         if (hasConnection)
             unbindService(mConnection);
         if (hasMessengerConnection)
             unbindService(mMessengerConnection);
+        super.onDestroy();
     }
+
+    private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            if (mAidl == null) {
+                return;
+            }
+            mAidl.asBinder().unlinkToDeath(mDeathRecipient, 0);
+            mAidl = null;
+            hasConnection = true;
+            Intent intent = new Intent(getApplicationContext(), MyAidlService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        }
+    };
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case ConfigUtils.MSG_NEW_PERSON_ARRIVED:
+                    Log.d(TAG, "receive new Person:" + msg.obj);
+                    textView2.setText(msg.obj.toString());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    };
 
 }

@@ -1,11 +1,18 @@
 package com.demo;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -30,10 +37,31 @@ public class CustomActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.btn_start, R.id.btn_insert, R.id.btn_query, R.id.btn_update, R.id.btn_delete})
+    @OnClick({R.id.btn_right, R.id.btn_start, R.id.btn_insert, R.id.btn_query, R.id.btn_update, R.id.btn_delete})
     public void onViewClicked(View view) {
         Uri uri = Uri.parse("content://com.demo.database.provider/book");
         switch (view.getId()) {
+            case R.id.btn_right:
+                Intent intent = new Intent(this, MainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                Notification notification = new NotificationCompat.Builder(this)
+                        .setContentTitle("This is Title")
+//                        .setContentText("This is text")
+                        .setWhen(System.currentTimeMillis())
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round))
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)//默认设置，铃声，振动...
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText("This is long text.This is long text.This is long text.This is long text.This is long text.This is long text."))
+                        .setPriority(NotificationCompat.PRIORITY_MAX)//优先级
+//                        .setStyle(new NotificationCompat.BigPictureStyle().bigLargeIcon())//大图片
+//                        .setVibrate(new long[]{0, 1500})//手机振动0静止，1500振动，静止，振动...
+//                        .setLights(Color.GREEN, 1000, 1000)//设置手机前置led灯，颜色、亮起、暗去
+                        .build();
+                notificationManager.notify(1, notification);
+                break;
             case R.id.btn_start:
                 circle3.startAnimation();
                 break;
@@ -44,7 +72,6 @@ public class CustomActivity extends AppCompatActivity {
                 values.put("pages", 1040);
                 values.put("price", 22.85);
                 Uri newUri = getContentResolver().insert(uri, values);
-                System.out.println("~~~~~~~~~~~~CustomActivity" + newUri.getPathSegments().size());
                 newId = newUri.getPathSegments().get(1);
                 break;
             case R.id.btn_query:

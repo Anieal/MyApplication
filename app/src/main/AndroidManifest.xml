@@ -8,6 +8,14 @@
     <!-- 外部存储读权限，调试工具加载本地补丁需要 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 手机振动 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="com.demo.permission.ACCESS_PERSON_SERVICE" />
+
+    <permission android:name="com.demo.permission.ACCESS_PERSON_SERVICE"
+        android:protectionLevel="normal"/>
 
     <application
         android:name=".App"
@@ -39,9 +47,8 @@
 
         <service
             android:name=".service.MyAidlService"
-            android:enabled="true"
-            android:exported="true"
             android:process=":aidl" />
+        
         <service android:name=".service.MessengerService" />
 
         <meta-data
@@ -58,7 +65,24 @@
             android:name=".provider.DatabaseProvider"
             android:authorities="com.demo.database.provider"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.demo.camera.file.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <service
+            android:name=".service.MyService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service android:name=".service.DownloadService" />
+
     </application>
 
 </manifest>

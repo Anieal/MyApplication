@@ -11,10 +11,24 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        config {
+            storeFile file('D:/studio workpase/APK_KEY/MyApplication.jks')
+            storePassword '666666'
+            keyAlias 'MyKey'
+            keyPassword '666666'
+
+//            KEY_PATH = 'D:/studio workpase/APK_KEY/MyApplication.jks'
+//            KEY_PASS = 666666
+//            ALIAS_NAME = MyKey
+//            ALIAS_PASS = 666666
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -39,4 +53,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.aliyun.ams:alicloud-android-hotfix:3.0.9'
     compile 'org.litepal.android:core:1.6.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
 }

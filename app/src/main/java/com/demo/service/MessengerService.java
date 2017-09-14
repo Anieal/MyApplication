@@ -8,43 +8,39 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.demo.util.ConfigUtils;
 
+import org.litepal.util.LogUtil;
+
 public class MessengerService extends Service {
 
-    private final String TAG = this.getClass().getSimpleName();
+    public static final String TAG = "MessengerService";
 
-    Messenger mMessenger = new Messenger(new Handler() {
+    private final Messenger mMessenger = new Messenger(new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg != null && msg.arg1 == ConfigUtils.MSG_ID_CLIENT) {
-                if (msg.getData() == null) {
-                    return;
-                }
-                String content = (String) msg.getData().get(ConfigUtils.MSG_CONTENT);
-                Log.d(TAG, "Message from client:" + content);
-
-                //回复客户端信息
-                Message replyMsg = Message.obtain();
-                replyMsg.arg1 = ConfigUtils.MSG_ID_SERVER;
-                Bundle bundle = new Bundle();
-                bundle.putString(ConfigUtils.MSG_CONTENT, "收到你的消息了");
-                replyMsg.setData(bundle);
-
-                try {
-                    //回信
-                    msg.replyTo.send(replyMsg);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+            switch (msg.what) {
+                case ConfigUtils.MSG_ID_CLIENT:
+                    Log.i(TAG, "receive msg from client: " + msg.getData().getString(ConfigUtils.MSG_CONTENT));
+                    Messenger client = msg.replyTo;
+                    Message replayMessage = Message.obtain(null, ConfigUtils.MSG_ID_SERVER);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ConfigUtils.MSG_CONTENT, "收到您的消息了，稍后会回复您！");
+                    replayMessage.setData(bundle);
+                    try {
+                        client.send(replayMessage);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    super.handleMessage(msg);
             }
         }
     });
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mMessenger.getBinder();
